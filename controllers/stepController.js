@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Step = mongoose.model('Step');
 
-exports.list_all_step = function(req, res) {
+exports.list_all_steps = function(req, res) {
     Step.find({}, function(err, step) {
         if (err){
             res.status(500).send(err);

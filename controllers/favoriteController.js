@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     FavouriteList = mongoose.model('FavouriteList');
 
-exports.list_all_favouriteList = function(req, res) {
+exports.list_all_favourite_lists = function(req, res) {
     FavouriteList.find({}, function(err, favouriteList) {
         if (err){
             res.status(500).send(err);
@@ -14,7 +14,7 @@ exports.list_all_favouriteList = function(req, res) {
     });
 };
 
-exports.create_a_favouriteList = function(req, res) {
+exports.create_a_favourite_list = function(req, res) {
     var new_favouriteList = new FavouriteList(req.body);
     new_favouriteList.save(function(err, favouriteList) {
         if (err){
@@ -32,7 +32,7 @@ exports.create_a_favouriteList = function(req, res) {
 };
 
 
-exports.read_a_favouriteList = function(req, res) {
+exports.read_a_favourite_list = function(req, res) {
     FavouriteList.findById(req.params.recipeId, function(err, favouriteList) {
         if (err){
             res.status(500).send(err);
@@ -43,7 +43,7 @@ exports.read_a_favouriteList = function(req, res) {
     });
 };
 
-exports.update_a_favouriteList = function(req, res) {
+exports.update_a_favourite_list = function(req, res) {
     FavouriteList.findOneAndUpdate({_id: req.params.recipeId}, req.body, {new: true}, function(err, favouriteList) {
         if (err){
             if(err.name=='ValidationError') {
@@ -59,7 +59,7 @@ exports.update_a_favouriteList = function(req, res) {
     });
 };
 
-exports.delete_a_favouriteList = function(req, res) {
+exports.delete_a_favourite_list = function(req, res) {
     FavouriteList.deleteOne({_id: req.params.recipeId}, function(err, favouriteList) {
         if (err){
             res.status(500).send(err);

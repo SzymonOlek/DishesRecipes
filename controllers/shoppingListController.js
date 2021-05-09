@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     ShoppingList = mongoose.model('ShoppingList');
 
-exports.list_all_shoppingList = function(req, res) {
+exports.list_all_shopping_lists = function(req, res) {
     ShoppingList.find({}, function(err, shoppingList) {
         if (err){
             res.status(500).send(err);
@@ -14,7 +14,7 @@ exports.list_all_shoppingList = function(req, res) {
     });
 };
 
-exports.create_a_shoppingList = function(req, res) {
+exports.create_a_shopping_list = function(req, res) {
     var new_shoppingList = new ShoppingList(req.body);
     new_shoppingList.save(function(err, shoppingList) {
         if (err){
@@ -32,7 +32,7 @@ exports.create_a_shoppingList = function(req, res) {
 };
 
 
-exports.read_a_shoppingList = function(req, res) {
+exports.read_a_shopping_list = function(req, res) {
     ShoppingList.findById(req.params.recipeId, function(err, shoppingList) {
         if (err){
             res.status(500).send(err);
@@ -43,7 +43,7 @@ exports.read_a_shoppingList = function(req, res) {
     });
 };
 
-exports.update_a_shoppingList = function(req, res) {
+exports.update_a_shopping_list = function(req, res) {
     ShoppingList.findOneAndUpdate({_id: req.params.shoppingListId}, req.body, {new: true}, function(err, shoppingList) {
         if (err){
             if(err.name=='ValidationError') {
@@ -59,7 +59,7 @@ exports.update_a_shoppingList = function(req, res) {
     });
 };
 
-exports.delete_a_shoppingList = function(req, res) {
+exports.delete_a_shopping_list = function(req, res) {
     ShoppingList.deleteOne({_id: req.params.shoppingListId}, function(err, shoppingList) {
         if (err){
             res.status(500).send(err);

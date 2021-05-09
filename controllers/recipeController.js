@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Recipe = mongoose.model('Recipes');
 
-exports.list_all_recipe = function(req, res) {
+exports.list_all_recipes = function(req, res) {
     Recipe.find({}, function(err, recipe) {
         if (err){
             res.status(500).send(err);
@@ -81,7 +81,7 @@ exports.search_recipe = function(req, res) {
 };
 
 
-exports.create_an_recipe = function(req, res) {
+exports.create_a_recipe = function(req, res) {
     var new_recipe = new Recipe(req.body);
     new_recipe.save(function(err, recipe) {
         if (err){
@@ -99,7 +99,7 @@ exports.create_an_recipe = function(req, res) {
 };
 
 
-exports.read_an_recipe = function(req, res) {
+exports.read_a_recipe = function(req, res) {
     Recipe.findById(req.params.recipeId, function(err, recipe) {
         if (err){
             res.status(500).send(err);
@@ -128,7 +128,7 @@ exports.update_a_recipe = function(req, res) {
 };
 
 
-exports.delete_an_recipe = function(req, res) {
+exports.delete_a_recipe = function(req, res) {
     Recipe.deleteOne({
         _id: req.params.recipeId
     }, function(err, recipe) {
