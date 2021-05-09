@@ -2,17 +2,20 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var IngredientsSchema = require('../models/ingredientModel');
+var ingredient = require('./ingredientsModel');
 
 var ShoppingListSchema = new Schema({
   size: {
     type: Number,
   },
-  ingredients: [IngredientsSchema],
+  ingredients: [ingredient.IngredientsSchema],
   created: {
     type: Date,
     default: Date.now
   }
 }, { strict: false });
 
-module.exports = mongoose.model('ShoppingLists', ShoppingListSchema);
+module.exports = {
+  ShoppingListModel: mongoose.model('ShoppingList', ShoppingListSchema),
+  ShoppingListSchema: ShoppingListSchema
+}

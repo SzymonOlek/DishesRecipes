@@ -2,14 +2,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var RecipeSchema = require('../models/recipeModel');
+var recipe = require('./recipeModel');
 
 var FavouriteListSchema = new Schema({
-  recipes: [RecipeSchema],
+  recipes: [recipe.RecipeSchema],
   created: {
     type: Date,
     default: Date.now
   }
 }, { strict: false });
 
-module.exports = mongoose.model('FavouriteLists', FavouriteListSchema);
+module.exports = {
+  FavouriteListModel: mongoose.model('FavouriteList', FavouriteListSchema),
+  FavouriteListSchema: FavouriteListSchema
+}

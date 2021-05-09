@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
-var CreatedRecipesSchema = require('../models/createdRecipesModel');
-var FavouriteListSchema = require('../models/createdRecipesModel');
+var createdRecipes = require('./createdRecipesModel');
+var favouriteList = require('./favouriteListModel');
 
 var ActorSchema = new Schema({
   nick: {
@@ -27,13 +27,18 @@ var ActorSchema = new Schema({
     type: String,
     required: 'Kindly enter the phone number'
   },
+  age: {
+    type: Number,
+    required: 'Kindly enter the age number',
+    min: 0
+  },
   role: [{
     type: String,
     required: 'Kindly enter the user role(s)',
     enum: ['CUSTOMER', 'ADMINISTRATOR']
   }],
-  createdRecipes : [CreatedRecipesSchema],
-  favouriteLists : [FavouriteListSchema],
+  createdRecipes : [createdRecipes.CreatedRecipesSchema],
+  favouriteLists : [favouriteList.FavouriteListSchema],
   created: {
     type: Date,
     default: Date.now
@@ -66,4 +71,7 @@ ActorSchema.methods.verifyPassword = function(password, callback) {
   });
 };
 
-module.exports = mongoose.model('Actors', ActorSchema);
+module.exports = {
+  ActorModel: mongoose.model('Actors', ActorSchema),
+  ActorSchema: ActorSchema,
+}

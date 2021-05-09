@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function (app) {
-    var shoppingList = require('../controllers/shoppingList');
+    var shoppingList = require('../controllers/shoppingListController');
 
     app.route('/v1/shoppingList')
         .get(shoppingList.list_all_shopping_lists)

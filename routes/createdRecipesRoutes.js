@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function (app) {
-    var createdRecipes = require('../controllers/createdRecipesModel');
+    var createdRecipes = require('../controllers/createdRecipesController');
 
     app.route('/v1/createdRecipes')
         .get(createdRecipes.list_all_create_recipes)

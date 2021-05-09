@@ -15,4 +15,7 @@ var QuantitySchema = new Schema({
   }
 }, { strict: false });
 
-module.exports = mongoose.model('Quantities', QuantitySchema);
+module.exports = {
+  QuantityModel: mongoose.model('Quantity', QuantitySchema),
+  QuantitySchema: QuantitySchema,
+}

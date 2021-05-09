@@ -17,4 +17,7 @@ var CategorySchema = new Schema({
   }
 }, { strict: false });
 
-module.exports = mongoose.model('Categories', CategorySchema);
+module.exports = {
+  CategoryModel: mongoose.model('Categories', CategorySchema),
+  CategorySchema : CategorySchema
+}

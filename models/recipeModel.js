@@ -5,10 +5,10 @@ var Schema = mongoose.Schema;
 const customAlphabet = require("nanoid").customAlphabet;
 const skuGenerator = customAlphabet('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6)
 
-var CategorySchema = require('../models/categoryModel');
-var CommentSchema = require('../models/commentModel');
-var StepsSchema = require('../models/stepModel');
-var IngredientsSchema = require('../models/ingredientsModel');
+var category = require('./categoryModel');
+var comment = require('./commentModel');
+var steps = require('./stepModel');
+var ingredient = require('./ingredientsModel') 
 
 var RecipeSchema = new Schema({
   sku: {
@@ -65,10 +65,10 @@ var RecipeSchema = new Schema({
   linkVideo: {
     type: String
   },
-  category: [CategorySchema],
-  comments: [CommentSchema],
-  steps: [StepsSchema],
-  ingredients: [IngredientsSchema],
+  category: [category.CategorySchema],
+  comments: [comment.CommentScheme],
+  steps: [steps.StepSchema],
+  ingredients: [ingredient.IngredientsSchema],
   created: {
     type: Date,
     default: Date.now
@@ -85,5 +85,8 @@ RecipeSchema.pre('save', function(callback) {
 RecipeSchema.index({ category: 1, price: 1 }); //1 ascending,  -1 descending
 RecipeSchema.index({ name: 'text', description: 'text', sku: 'text' });
 
-module.exports = mongoose.model('Recipes', RecipeSchema);
+module.exports = {
+  RecipeModel: mongoose.model('Recipes', RecipeSchema),
+  RecipeSchema: RecipeSchema
+}
 

@@ -22,4 +22,7 @@ var StepSchema = new Schema({
   }
 }, { strict: false });
 
-module.exports = mongoose.model('Steps', StepSchema);
+module.exports = {
+  StepsModel: mongoose.model('Step', StepSchema),
+  StepSchema: StepSchema
+}
