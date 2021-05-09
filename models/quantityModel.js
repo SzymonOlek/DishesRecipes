@@ -7,7 +7,7 @@ var QuantitySchema = new Schema({
   quantity: {
     type: Number,
     min: 0,
-    required: 'Kindly enter the name of the Category'
+    required: 'Kindly enter the weight'
   },
   created: {
     type: Date,
