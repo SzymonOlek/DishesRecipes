@@ -14,7 +14,7 @@ exports.list_all_recipes = function(req, res) {
     });
 };
 
-exports.list_my_recipe= function(req, res) {
+exports.list_my_recipe= function(req, res) { // todo 
     Recipe.find(function(err, recipe) {
         if (err){
             res.status(500).send(err);
@@ -27,20 +27,20 @@ exports.list_my_recipe= function(req, res) {
 
 exports.search_recipe = function(req, res) {
     var query = {};
-
+// add ingredients
     if(req.query.categoryId){
         query.category=req.query.categoryId;
     }
 
-    if(req.query.stars){
+    if(req.query.stars){ // chanage to min ie. min 3 starts etc.
         query.stars = req.query.stars;
     }
 
-    if(req.query.difficultLevel){
+    if(req.query.difficultLevel){ // as max diff level
         query.difficultLevel = req.query.difficultLevel;
     }
 
-    if(req.query.calories){
+    if(req.query.calories){ // / as max calo level
         query.calories = req.query.calories;
     }
 
@@ -140,3 +140,6 @@ exports.delete_a_recipe = function(req, res) {
         }
     });
 };
+
+
+//TODO add steps to recipe etc.

@@ -36,7 +36,7 @@ var RecipeSchema = new Schema({
   },
   preparationTime: {
     type: Number,
-    required: 'Kindly enter the preparation time'
+    required: 'Kindly enter the preparation time in minutes'
   },
   stars: {
     type: Number,
@@ -76,17 +76,16 @@ var RecipeSchema = new Schema({
 },  { strict: false });
 
 // Execute before each item.save() call
-RecipeSchema.pre('save', function(callback) {
+RecipeSchema.pre('save', function(callback) { 
   var new_item = this;
   new_item.sku = skuGenerator();
   callback();
 });
 
-RecipeSchema.index({ category: 1, price: 1 }); //1 ascending,  -1 descending
-RecipeSchema.index({ name: 'text', description: 'text', sku: 'text' });
+RecipeSchema.index({ category: 1}); //1 ascending,  -1 descending
+RecipeSchema.index({ name: 'text', sku: 'text'});// set weights of each prop
 
 module.exports = {
   RecipeModel: mongoose.model('Recipes', RecipeSchema),
   RecipeSchema: RecipeSchema
 }
-

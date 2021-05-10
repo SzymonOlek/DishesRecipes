@@ -2,10 +2,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var recipe = require('./recipeModel');
-
 var FavouriteListSchema = new Schema({
-  recipes: [recipe.RecipeSchema],
+  recipes: [Schema.Types.ObjectId],
   created: {
     type: Date,
     default: Date.now

@@ -4,8 +4,8 @@ var Schema = mongoose.Schema;
 
 var recipe = require('./recipeModel');
 
-var CreatedRecipesSchema = new Schema({//sssss
-  recipes: [recipe.RecipeSchema],
+var CreatedRecipesSchema = new Schema({
+  recipes: [Schema.Types.ObjectId],
   created: {
     type: Date,
     default: Date.now

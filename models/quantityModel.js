@@ -3,11 +3,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 
-var QuantitySchema = new Schema({
+var QuantitySchema = new Schema({ // add units 
   quantity: {
     type: Number,
     min: 0,
     required: 'Kindly enter the weight'
+  },
+  quantity: {
+    type: String,
+    required: 'Kindly enter the unit of ingredient'
   },
   created: {
     type: Date,
