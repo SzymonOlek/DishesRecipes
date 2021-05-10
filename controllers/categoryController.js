@@ -1,71 +1,66 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Category = mongoose.model('Categories');
+    Category = mongoose.model('Categories'),
+    Recipe = mongoose.model('Recipes');
 
-exports.list_all_categories = function(req, res) {
-    Category.find({}, function(err, categs) {
-        if (err){
+exports.list_all_categories = function (req, res) {
+    Category.find({}, function (err, categs) {
+        if (err) {
             res.status(500).send(err);
-        }
-        else{
+        } else {
             res.json(categs);
         }
     });
 };
 
-exports.create_a_category = function(req, res) {
-    var new_categ = new Category(req.body);
-    new_categ.save(function(err, categ) {
-        if (err){
-            if(err.name=='ValidationError') {
-                res.status(422).send(err);
-            }
-            else{
-                res.status(500).send(err);
-            }
-        }
-        else{
-            res.json(categ);
-        }
-    });
-};
-
-
-exports.read_a_category = function(req, res) {
-    Category.findById(req.params.categId, function(err, categ) {
-        if (err){
+exports.read_a_category = function (req, res) {
+    Category.findById(req.params.categId, function (err, categ) {
+        if (err) {
             res.status(500).send(err);
-        }
-        else{
+        } else {
             res.json(categ);
         }
     });
 };
 
-exports.update_a_category = function(req, res) {
-    Category.findOneAndUpdate({_id: req.params.categId}, req.body, {new: true}, function(err, categ) {
-        if (err){
-            if(err.name=='ValidationError') {
-                res.status(422).send(err);
-            }
-            else{
-                res.status(500).send(err);
-            }
-        }
-        else{
-            res.json(categ);
-        }
-    });
-};
-
-exports.delete_a_category = function(req, res) {
-    Category.deleteOne({_id: req.params.categId}, function(err, categ) {
-        if (err){
+exports.list_all_categories_of_recipes = function (req, res) {
+    Recipe.find({
+        "_id": req.params.recipeId,
+    }, function (err, recipe) {
+        if (err) {
             res.status(500).send(err);
-        }
-        else{
-            res.json({ message: 'Category successfully deleted' });
+        } else {
+            res.json(recipe[0].category);
         }
     });
+};
+
+exports.update_a_category_of_recipes = async function (req, res) {
+    const update = {
+        category: req.body
+    }
+    let result  = await Recipe.findOneAndUpdate({
+        "_id": req.params.recipeId,
+    }, update, {new: true})
+    res.json(result)
+};
+
+exports.delete_a_category_of_recipes = function (req, res) {
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+            var element = recipe.category.find((cat, index) => {
+                if(cat.id == req.params.categoryId)
+                    return cat
+            });
+            var idx =  recipe.category.indexOf(element)
+            if (idx !== -1) {
+                recipe.category.splice(idx, 1);
+                return recipe.save();
+            }
+        })
+        .then((recipe) => {
+            res.json({ recipe: recipe });
+        })
+        .catch(e => res.status(400).send(e));
 };

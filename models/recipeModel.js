@@ -82,8 +82,13 @@ RecipeSchema.pre('save', function(callback) {
   callback();
 });
 
-RecipeSchema.index({ category: 1}); //1 ascending,  -1 descending
-RecipeSchema.index({ name: 'text', sku: 'text'});// set weights of each prop
+RecipeSchema.index({'category.name':'text'});
+RecipeSchema.index({stars:1}); //1 ascending,  -1 descending
+RecipeSchema.index({difficultLevel:1}); //1 ascending,  -1 descending
+RecipeSchema.index({sku:'text'}); //1 ascending,  -1 descending
+RecipeSchema.index({name:'text'});// set weights of each prop
+RecipeSchema.index({'ingredients.name' : 'text'}); // set weights of each prop
+
 
 module.exports = {
   RecipeModel: mongoose.model('Recipes', RecipeSchema),

@@ -9,7 +9,7 @@ var QuantitySchema = new Schema({ // add units
     min: 0,
     required: 'Kindly enter the weight'
   },
-  quantity: {
+  unit: {
     type: String,
     required: 'Kindly enter the unit of ingredient'
   },

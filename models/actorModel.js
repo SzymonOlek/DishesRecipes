@@ -14,7 +14,7 @@ var ActorSchema = new Schema({
   },
   password: {
     type: String,
-    minlength:5,
+    minLength:5,
     required: 'Kindly enter the actor password'
   },
   email: {
@@ -70,6 +70,9 @@ ActorSchema.methods.verifyPassword = function(password, callback) {
     callback(null, isMatch);
   });
 };
+
+ActorSchema.index({ nick: 'text'});
+ActorSchema.index({ email: 'text'});
 
 module.exports = {
   ActorModel: mongoose.model('Actors', ActorSchema),

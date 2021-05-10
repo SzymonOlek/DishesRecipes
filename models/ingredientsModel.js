@@ -7,7 +7,7 @@ var quant = require('./quantityModel');
 var IngredientsSchema = new Schema({
   name: {
     type: String,
-    required: 'Kindly enter the name of the Category'
+    required: 'Kindly enter the name of the Ingredients'
   },
   quantities: [quant.QuantitySchema],
   created: {
