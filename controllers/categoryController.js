@@ -4,17 +4,34 @@ var mongoose = require('mongoose'),
     Category = mongoose.model('Categories'),
     Recipe = mongoose.model('Recipes');
 
-exports.list_all_categories = function (req, res) {
-    Recipe.find({
-    }).populate('categories.$*.name')
-        .exec( function (err, result) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(result);
-        }
-    });
+exports.list_all_categories = async function (req, res) {
+    var cate = await Recipe
+        .find({})
+        .populate({
+            path: 'categories',
+            match: {},
+            select: 'name'
+        })
+        .exec()
+        // .exec( function (err, result) {
+        //         if (err) {
+        //             res.status(500).send(err);
+        //         } else {
+        //             res.json(result);
+        //         }
+        //     });
+    // res.json(cate);
+    // Recipe.find({
+    // }).populate('categories.$*.name')
+    //     .exec( function (err, result) {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     } else {
+    //         res.json(result);
+    //     }
+    // });
 };
+
 
 exports.read_a_category = function (req, res) {
     Category.findById(req.params.categId, function (err, categ) {

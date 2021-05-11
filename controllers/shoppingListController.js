@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose'),
     ShoppingList = mongoose.model('ShoppingList'),
-    Actor = mongoose.model('Actor');
+    Actor = mongoose.model('Actors');
 
 exports.list_all_shopping_lists = function(req, res) {
     ShoppingList.find({}, function(err, shoppingList) {
@@ -26,23 +26,6 @@ exports.list_all_shopping_lists_of_actor = function (req, res) {
         }
     });
 };
-
-//exports.create_a_shopping_list = function(req, res) {
-//    var new_shoppingList = new ShoppingList(req.body);
-//    new_shoppingList.save(function(err, shoppingList) {
-//        if (err){
-//            if(err.name=='ValidationError') {
-//                res.status(422).send(err);
-//            }
-//            else{
-//                res.status(500).send(err);
-//            }
-//        }
-//        else{
-//            res.json(shoppingList);
-//        }
-//    });
-//};
 
 exports.create_a_shopping_List_for_a_actor = function (req, res) {
     Actor.find({
