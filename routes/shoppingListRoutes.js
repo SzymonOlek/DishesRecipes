@@ -12,7 +12,7 @@ module.exports = function (app) {
 
     app.route('/v1/actors/:actorId/shoppingList')
         .get(shoppingList.list_all_shopping_lists_of_actor)
-        .post(shoppingList.create_a_shopping_List_for_a_actor())
+        .post(shoppingList.create_a_shopping_List_for_a_actor)
         .put(shoppingList.update_a_shopping_list_of_actor)
 
     app.route('/v1/recipes/:actorId/actors/:shoppingListId')

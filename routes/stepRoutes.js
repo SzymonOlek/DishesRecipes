@@ -9,7 +9,7 @@ module.exports = function (app) {
         .get(steps.read_a_step)
 
     app.route('/v1/recipes/:recipeId/steps')
-        .get(steps.list_all_steps_of_recipe())
+        .get(steps.list_all_steps_of_recipe)
         .post(steps.create_a_step_of_recipe)
         .put(steps.update_a_step_of_recipe)
 
