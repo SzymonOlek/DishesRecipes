@@ -5,11 +5,13 @@ var mongoose = require('mongoose'),
     Recipe = mongoose.model('Recipes');
 
 exports.list_all_categories = function (req, res) {
-    Category.find({}, function (err, categs) {
+    Recipe.find({
+    }).populate('categories.$*.name')
+        .exec( function (err, result) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(categs);
+            res.json(result);
         }
     });
 };
@@ -25,7 +27,7 @@ exports.read_a_category = function (req, res) {
 };
 
 exports.list_all_categories_of_recipe = function (req, res) {
-    Recipe.find({
+    Recipe.findOne({
         "_id": req.params.recipeId,
     }, function (err, recipe) {
         if (err) {
@@ -86,7 +88,7 @@ exports.delete_a_category_of_recipe = function (req, res) {
             }
         })
         .then((recipe) => {
-            res.json({ message: 'Comment successfully deleted' });
+            res.json({ message: 'Category successfully deleted' });
         })
         .catch(e => res.status(400).send(e));
 };

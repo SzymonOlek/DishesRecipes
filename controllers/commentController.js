@@ -33,7 +33,7 @@ exports.list_all_comments_of_recipe = function (req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(recipe[0].comment);
+            res.json(recipe[0].comments);
         }
     });
 };
@@ -45,10 +45,10 @@ exports.create_a_comment_of_recipe = function (req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            let commentTemp = recipe[0].comment
+            let commentTemp = recipe[0].comments
             commentTemp.push(req.body)
             const update = {
-                comment: commentTemp
+                comments: commentTemp
             }
             Recipe.findOneAndUpdate({
                     "_id": req.params.recipeId,
@@ -64,29 +64,31 @@ exports.create_a_comment_of_recipe = function (req, res) {
     });
 };
 
-exports.update_a_comment_of_recipe = function(req, res) {
-    Comment.findOneAndUpdate({_id: req.params.commentId}, req.body, {new: true}, function(err, comment) {
-        if (err){
-            if(err.name=='ValidationError') {
-                res.status(422).send(err);
-            }
-            else{
-                res.status(500).send(err);
-            }
-        }
-        else{
-            res.json(comment);
-        }
-    });
+exports.update_a_comment_of_recipe = async function(req, res) {
+    const update = {
+        comments: req.body
+    }
+    let result = await Recipe.findOneAndUpdate({
+        "_id": req.params.recipeId,
+    }, update, {new: true})
+    res.json(result)
 };
 
 exports.delete_a_comment_of_recipe = function(req, res) {
-    Comment.deleteOne({_id: req.params.commentId}, function(err, comment) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+            var element = recipe.comments.find((value, index) => {
+                if (value.id == req.params.commentId)
+                    return value
+            });
+            var idx = recipe.comments.indexOf(element)
+            if (idx !== -1) {
+                recipe.comments.splice(idx, 1);
+                return recipe.save();
+            }
+        })
+        .then((recipe) => {
             res.json({ message: 'Comment successfully deleted' });
-        }
-    });
+        })
+        .catch(e => res.status(400).send(e));
 };
