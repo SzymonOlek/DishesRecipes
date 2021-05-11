@@ -32,6 +32,18 @@ exports.create_a_quantity = function(req, res) {
     });
 };
 
+exports.list_quantity_of_Ingredient = function (req, res) {
+    Ingredients.findOne({
+        "_id": req.params.ingredientId,
+    }, function (err, ingredients) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(ingredients[0].quantity);
+        }
+    });
+};
+
 exports.create_a_quantity_of_ingredient = function (req, res) {
     Ingredients.find({
         "_id": req.params.ingredientsId,
@@ -105,4 +117,23 @@ exports.delete_a_quantity = function(req, res) {
             res.json({ message: 'Quantity successfully deleted' });
         }
     });
+};
+
+exports.delete_a_quantity_of_ingredient = function (req, res) {
+    Ingredient.findById(req.params.ingredientId)
+        .then((ingredient) => {
+            var element = ingredient.quantity.find((cat, index) => {
+                if (cat.id == req.params.quantityId)
+                    return cat
+            });
+            var idx = ingredient.quantity.indexOf(element)
+            if (idx !== -1) {
+                ingredient.quantity.splice(idx, 1);
+                return ingredient.save();
+            }
+        })
+        .then((recipe) => {
+            res.json({ message: 'Category successfully deleted' });
+        })
+        .catch(e => res.status(400).send(e));
 };

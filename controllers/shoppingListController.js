@@ -15,6 +15,18 @@ exports.list_all_shopping_lists = function(req, res) {
     });
 };
 
+exports.list_all_shopping_lists_of_actor = function (req, res) {
+    Actor.findOne({
+        "_id": req.params.actorId,
+    }, function (err, recipe) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(actor[0].shoppingList);
+        }
+    });
+};
+
 //exports.create_a_shopping_list = function(req, res) {
 //    var new_shoppingList = new ShoppingList(req.body);
 //    new_shoppingList.save(function(err, shoppingList) {

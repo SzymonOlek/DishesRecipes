@@ -15,6 +15,18 @@ exports.list_all_steps = function(req, res) {
     });
 };
 
+exports.list_all_steps_of_recipe = function (req, res) {
+    Recipe.findOne({
+        "_id": req.params.recipeId,
+    }, function (err, recipe) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(recipe[0].step);
+        }
+    });
+};
+
 // Usunac? \/
 //exports.create_a_step = function(req, res) {
 //    var new_step = new Step(req.body);
