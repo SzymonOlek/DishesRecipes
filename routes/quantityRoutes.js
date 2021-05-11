@@ -13,7 +13,7 @@ module.exports = function (app) {
     app.route('/v1/ingredients/:ingredientsId/quantity')
         .get(quantity.list_quantity_of_Ingredient)
         .post(quantity.create_a_quantity_of_ingredient)
-        .put(quantity.update_a_quantity_of_ingredient)
+        .put(quantity.update_a_quantity_of_ingredient);
 
     app.route('/v1/ingredients/:ingredientsId/quantity/:quantityId')
         .delete(quantity.delete_a_quantity_of_ingredient);
