@@ -11,7 +11,7 @@ exports.list_all_recipes = function(req, res) {
         else{
             res.json(recipe);
         }
-    });
+    }).limit(200);
 };
 
 exports.list_my_recipe= function(req, res) { // todo 
@@ -20,6 +20,7 @@ exports.list_my_recipe= function(req, res) { // todo
             res.status(500).send(err);
         }
         else{
+            console.log('xxxx');
             res.json(recipe);
         }
     });
@@ -100,11 +101,12 @@ exports.create_a_recipe = function(req, res) {
 
 
 exports.read_a_recipe = function(req, res) {
-    Recipe.findById(req.params.recipeId, function(err, recipe) {
+    Recipe.find({_id : req.params.recipeId}, function(err, recipe) {
         if (err){
             res.status(500).send(err);
         }
         else{
+            console.log(recipe);
             res.json(recipe);
         }
     });

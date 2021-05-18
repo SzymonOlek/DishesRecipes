@@ -5,9 +5,7 @@ var Schema = mongoose.Schema;
 var ingredient = require('./ingredientsModel');
 
 var ShoppingListSchema = new Schema({
-  size: {
-    type: Number,
-  },
+
   ingredients: [ingredient.IngredientsSchema],
   created: {
     type: Date,
