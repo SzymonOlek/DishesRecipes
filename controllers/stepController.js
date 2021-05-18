@@ -46,29 +46,36 @@ exports.list_all_steps_of_recipe = function (req, res) {
 //};
 
 exports.create_a_step_of_recipe = function (req, res) {
-    Recipe.find({
-        "_id": req.params.recipeId,
-    }, function (err, recipe) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            let stepTemp = recipe[0].step
-            stepTemp.push(req.body)
-            const update = {
-                step: stepTemp
-            }
-            Recipe.findOneAndUpdate({
-                    "_id": req.params.recipeId,
-                }, update, {new: true}, function (err, result) {
-                    if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        res.json(result)
-                    }
-                }
-            )
+    Recipe.updateOne({
+            "_id": req.params.recipeId,
+        },
+        {
+            $push: {step:req.body}
         }
-    });
+    )
+    // Recipe.find({
+    //     "_id": req.params.recipeId,
+    // }, function (err, recipe) {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     } else {
+    //         let stepTemp = recipe[0].step
+    //         stepTemp.push(req.body)
+    //         const update = {
+    //             step: stepTemp
+    //         }
+    //         Recipe.findOneAndUpdate({
+    //                 "_id": req.params.recipeId,
+    //             }, update, {new: true}, function (err, result) {
+    //                 if (err) {
+    //                     res.status(500).send(err);
+    //                 } else {
+    //                     res.json(result)
+    //                 }
+    //             }
+    //         )
+    //     }
+    // });
 };
 
 exports.read_a_step = function(req, res) {

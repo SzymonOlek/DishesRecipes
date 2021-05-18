@@ -45,29 +45,36 @@ exports.list_quantity_of_Ingredient = function (req, res) {
 };
 
 exports.create_a_quantity_of_ingredient = function (req, res) {
-    Ingredients.find({
-        "_id": req.params.ingredientsId,
-    }, function (err, ingredient) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            let quantityTemp = ingredient[0].quantity
-            quantityTemp.push(req.body)
-            const update = {
-                quantity: quantityTemp
-            }
-            Ingredients.findOneAndUpdate({
-                    "_id": req.params.ingredientsId,
-                }, update, {new: true}, function (err, result) {
-                    if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        res.json(result)
-                    }
-                }
-            )
+    Ingredients.updateOne({
+            "_id": req.params.ingredientId,
+        },
+        {
+            $push: {quantity:req.body}
         }
-    });
+    )
+    // Ingredients.find({
+    //     "_id": req.params.ingredientsId,
+    // }, function (err, ingredient) {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     } else {
+    //         let quantityTemp = ingredient[0].quantity
+    //         quantityTemp.push(req.body)
+    //         const update = {
+    //             quantity: quantityTemp
+    //         }
+    //         Ingredients.findOneAndUpdate({
+    //                 "_id": req.params.ingredientsId,
+    //             }, update, {new: true}, function (err, result) {
+    //                 if (err) {
+    //                     res.status(500).send(err);
+    //                 } else {
+    //                     res.json(result)
+    //                 }
+    //             }
+    //         )
+    //     }
+    // });
 };
 
 //usunac
