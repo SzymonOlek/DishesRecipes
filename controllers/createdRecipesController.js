@@ -38,7 +38,7 @@ exports.list_all_created_recipes_of_actor= function (req, res) {
     });
 };
 
-exports.create_a_created_recipe_of_actor = function (req, res) {
+exports.add_a_created_recipe_of_actor = function (req, res) {
     Actor.updateOne({
             "_id": req.params.actorId,
         },
@@ -71,7 +71,7 @@ exports.create_a_created_recipe_of_actor = function (req, res) {
     // });
 };
 
-exports.update_a_created_recipe_of_actor = async function (req, res) {
+exports.clear_a_created_recipe_of_actor = async function (req, res) {
     const update = {
         createdRecipes: req.body
     }
@@ -85,7 +85,7 @@ exports.delete_a_created_recipe_of_actor = function (req, res) {
     Actor.findById(req.params.actorId)
         .then((actor) => {
             var element = actor.createdRecipes.find((value, index) => {
-                if (value.id === req.params.createdRecipeId)
+                if (value.id === req.params.recipeId)
                     return value
             });
             var idx = actor.createdRecipes.indexOf(element)

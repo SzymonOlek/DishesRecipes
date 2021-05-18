@@ -39,15 +39,15 @@ var ActorSchema = new Schema({
     default: 'CUSTOMER'
   }],
   createdRecipes : {
-    type: [createdRecipes.CreatedRecipesSchema],
+    type: [Schema.Types.ObjectId],
     default: [],
   },
   favouriteLists : {
-    type: [favouriteList.FavouriteListSchema],
+    type: [Schema.Types.ObjectId],
     default: [],
   },
   shoppingList :{
-    type: [shoppingList.shoppingListSchema],
+    type: [shoppingList.ShoppingListSchema],
     default: [],
   },
   created: {

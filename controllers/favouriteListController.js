@@ -26,7 +26,7 @@ exports.read_a_favourite_list = function(req, res) {
     });
 };
 
-exports.list_all_favourite_lists_of_actor= function (req, res) {
+exports.read_favourite_list_of_actor= function (req, res) {
     Actor.find({
         "_id": req.params.actorId,
     }, function (err, actor) {
@@ -38,7 +38,7 @@ exports.list_all_favourite_lists_of_actor= function (req, res) {
     });
 };
 
-exports.create_a_favourite_list_of_actor = function (req, res) {
+exports.add_recipie_to_a_favourite_list_of_actor = function (req, res) {
     Actor.updateOne({
             "_id": req.params.actorId,
         },
@@ -71,21 +71,23 @@ exports.create_a_favourite_list_of_actor = function (req, res) {
     // });
 };
 
-exports.update_a_favourite_list_of_actor = async function (req, res) {
-    const update = {
-        favouriteLists: req.body
-    }
-    let result = await Actor.findOneAndUpdate({
-        "_id": req.params.actorId,
-    }, update, {new: true})
-    res.json(result)
+exports.clear_a_favourite_list_of_actor = async function (req, res) {
+    Actor.findById(req.params.actorId)
+        .then((actor) => {
+            actor.favoriteList = [];
+            return actor.save();
+        })
+        .then((recipe) => {
+            res.json({ message: 'Favorite List successfully deleted' });
+        })
+        .catch(e => res.status(400).send(e));
 };
 
 exports.delete_a_favourite_list_of_actor = function (req, res) {
     Actor.findById(req.params.actorId)
         .then((actor) => {
             var element = actor.favouriteLists.find((value, index) => {
-                if (value.id === req.params.favouriteListId)
+                if (value.id === req.params.recipeId)
                     return value
             });
             var idx = actor.favouriteLists.indexOf(element)

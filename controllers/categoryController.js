@@ -12,7 +12,7 @@ exports.list_all_categories = async function (req, res) {
             match: {},
             select: 'name'
         })
-        .exec()
+    //res.json(cate);
 };
 
 

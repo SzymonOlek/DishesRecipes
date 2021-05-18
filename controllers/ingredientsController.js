@@ -72,7 +72,7 @@ exports.create_a_ingredient_of_recipe = function (req, res) {
     // });
 };
 
-exports.update_a_ingredient_of_recipe = async function (req, res) {
+exports.update_a_ingredients_of_recipe = async function (req, res) {
     const update = {
         ingredients: req.body
     }
@@ -80,6 +80,25 @@ exports.update_a_ingredient_of_recipe = async function (req, res) {
         "_id": req.params.recipeId,
     }, update, {new: true})
     res.json(result)
+};
+
+exports.update_a_ingredient_of_recipe = async function (req, res) {
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+            var element = recipe.ingredients.find((value, index) => {
+                if (value.id == req.params.stepId)
+                    return value
+            });
+            var idx = recipe.ingredients.indexOf(element)
+            if (idx !== -1) {
+                recipe.ingredients[idx] = req.body;
+                return recipe.save();
+            }
+        })
+        .then((recipe) => {
+            res.json({message: 'Ingredient successfully updated'});
+        })
+        .catch(e => res.status(400).send(e));
 };
 
 exports.delete_a_ingredient_of_recipe = function (req, res) {
@@ -114,32 +133,39 @@ exports.list_all_ingredients_of_shopping_list = function (req, res) {
 };
 
 exports.create_a_ingredient_of_shopping_list = function (req, res) {
-    ShoppingList.find({
-        "_id": req.params.shoppingListId,
-    }, function (err, shoppingList) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            let ingredientTemp = shoppingList[0].ingredients
-            ingredientTemp.push(req.body)
-            const update = {
-                ingredients: ingredientTemp
-            }
-            ShoppingList.findOneAndUpdate({
-                    "_id": req.params.shoppingListId,
-                }, update, {new: true}, function (err, result) {
-                    if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        res.json(result)
-                    }
-                }
-            )
+    ShoppingList.updateOne({
+            "_id": req.params.shoppingListId,
+        },
+        {
+            $push: {ingredients:req.body}
         }
-    });
+    )
+    // ShoppingList.find({
+    //     "_id": req.params.shoppingListId,
+    // }, function (err, shoppingList) {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     } else {
+    //         let ingredientTemp = shoppingList[0].ingredients
+    //         ingredientTemp.push(req.body)
+    //         const update = {
+    //             ingredients: ingredientTemp
+    //         }
+    //         ShoppingList.findOneAndUpdate({
+    //                 "_id": req.params.shoppingListId,
+    //             }, update, {new: true}, function (err, result) {
+    //                 if (err) {
+    //                     res.status(500).send(err);
+    //                 } else {
+    //                     res.json(result)
+    //                 }
+    //             }
+    //         )
+    //     }
+    // });
 };
 
-exports.update_a_ingredient_of_shopping_list = async function (req, res) {
+exports.update_a_ingredients_of_shopping_list = async function (req, res) {
     const update = {
         ingredients: req.body
     }
@@ -147,6 +173,25 @@ exports.update_a_ingredient_of_shopping_list = async function (req, res) {
         "_id": req.params.shoppingListId,
     }, update, {new: true})
     res.json(result)
+};
+
+exports.update_a_ingredient_of_shopping_list = async function (req, res) {
+    ShoppingList.findById(req.params.shoppingListId)
+        .then((recipe) => {
+            var element = recipe.ingredients.find((value, index) => {
+                if (value.id == req.params.stepId)
+                    return value
+            });
+            var idx = recipe.ingredients.indexOf(element)
+            if (idx !== -1) {
+                recipe.ingredients[idx] = req.body;
+                return recipe.save();
+            }
+        })
+        .then((recipe) => {
+            res.json({message: 'Shopping List successfully updated'});
+        })
+        .catch(e => res.status(400).send(e));
 };
 
 exports.delete_a_ingredient_of_shopping_list = function (req, res) {

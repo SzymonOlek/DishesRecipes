@@ -27,7 +27,7 @@ exports.list_all_shopping_lists_of_actor = function (req, res) {
     });
 };
 
-exports.create_a_shopping_List_for_a_actor = function (req, res) {
+exports.add_element_to_a_shopping_List_for_a_actor = function (req, res) {
     ShoppingList.findById(req.params.actorId, function(err, step) {
         if (err){
             res.status(500).send(err);
@@ -90,7 +90,7 @@ exports.update_a_shopping_list = function(req, res) {
     });
 };
 
-exports.update_a_shopping_list_of_actor = async function (req, res) {
+exports.update_a_shopping_lists_of_actor = async function (req, res) {
     const update = {
         shoppingList: req.body
     }
@@ -98,6 +98,25 @@ exports.update_a_shopping_list_of_actor = async function (req, res) {
         "_id": req.params.actorId,
     }, update, {new: true})
     res.json(result)
+};
+
+exports.update_element_in_shopping_list_of_actor = async function (req, res) {
+    ShoppingList.findById(req.params.shoppingListId)
+        .then((recipe) => {
+            var element = recipe.step.find((value, index) => {
+                if (value.id == req.params.stepId)
+                    return value
+            });
+            var idx = recipe.step.indexOf(element)
+            if (idx !== -1) {
+                recipe.step[idx] = req.body;
+                return recipe.save();
+            }
+        })
+        .then((recipe) => {
+            res.json({message: 'Step successfully updated'});
+        })
+        .catch(e => res.status(400).send(e));
 };
 
 
@@ -112,7 +131,7 @@ exports.delete_a_shopping_list = function(req, res) {
     });
 };
 
-exports.delete_a_shopping_list_of_actor = function (req, res) {
+exports.delete_element_in_shopping_list_of_actor = function (req, res) {
     Actor.findById(req.params.actorId)
         .then((actor) => {
             var element = actor.shoppingList.find((cat, index) => {
@@ -124,6 +143,18 @@ exports.delete_a_shopping_list_of_actor = function (req, res) {
                 actor.shoppingList.splice(idx, 1);
                 return actor.save();
             }
+        })
+        .then((recipe) => {
+            res.json({ message: 'Element of a shopping List successfully deleted' });
+        })
+        .catch(e => res.status(400).send(e));
+};
+
+exports.delete_shopping_list_of_actor = function (req, res) {
+    Actor.findById(req.params.actorId)
+        .then((actor) => {
+                actor.shoppingList = [];
+                return actor.save();
         })
         .then((recipe) => {
             res.json({ message: 'Shopping List successfully deleted' });

@@ -5,9 +5,6 @@ module.exports = function (app) {
     app.route('/v1/comments')
         .get(comments.list_all_comments)
 
-    app.route('/v1/comments/:commentId')
-        .get(comments.read_a_comment)
-
     app.route('/v1/recipes/:recipeId/comments')
         .get(comments.list_all_comments_of_recipe)
         .post(comments.create_a_comment_of_recipe)
@@ -16,5 +13,6 @@ module.exports = function (app) {
     app.route('/v1/recipes/:recipeId/comments/:commentId')
         .delete(comments.delete_a_comment_of_recipe)
         .put(comments.update_a_comment_of_recipe)
+        //.get(comments.read_a_comment_of_recipe) to do
 
 };

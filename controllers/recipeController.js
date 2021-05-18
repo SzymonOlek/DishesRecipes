@@ -1,7 +1,8 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Recipe = mongoose.model('Recipes');
+    Recipe = mongoose.model('Recipes'),
+    Actor = mongoose.model('Actors');
 
 exports.list_all_recipes = function(req, res) {
     Recipe.find({}, function(err, recipe) {
@@ -14,16 +15,16 @@ exports.list_all_recipes = function(req, res) {
     }).limit(200);
 };
 
-exports.list_my_recipe= function(req, res) { // todo 
-    Recipe.find(function(err, recipe) {
-        if (err){
-            res.status(500).send(err);
+exports.list_my_recipe = async function(req, res) { // todo
+    var actor = await Actor.findById(req.params.actorId)
+    var myRecipes = await Recipe.find({
+        '_id': {
+            $in: [
+                actor.createdRecipes
+            ]
         }
-        else{
-            console.log('xxxx');
-            res.json(recipe);
-        }
-    });
+    })
+    res.json(myRecipes);
 };
 
 exports.search_recipe = function(req, res) {

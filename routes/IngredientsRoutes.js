@@ -5,23 +5,22 @@ module.exports = function (app) {
     app.route('/v1/ingredients')
         .get(ingredients.list_all_ingredients)
 
-    app.route('/v1/ingredients/:ingredientId')
-        .get(ingredients.read_an_ingredient)
-
     app.route('/v1/recipes/:recipeId/ingredients')
         .get(ingredients.list_all_ingredients_of_recipe)
         .post(ingredients.create_a_ingredient_of_recipe)
-        .put(ingredients.update_a_ingredient_of_recipe)
+        .put(ingredients.update_a_ingredients_of_recipe)
 
     app.route('/v1/recipes/:recipeId/ingredients/:ingredientId')
-        .delete(ingredients.delete_a_ingredient_of_recipe);
+        .delete(ingredients.delete_a_ingredient_of_recipe)
+        .put(ingredients.update_a_ingredient_of_recipe);
 
-    app.route('/v1/shoppingList/:shoppingListId/ingredients')
+    app.route('/v1/actor/:actorId/shoppingList/:shoppingListId/ingredients')
         .get(ingredients.list_all_ingredients_of_shopping_list)
         .post(ingredients.create_a_ingredient_of_shopping_list)
-        .put(ingredients.update_a_ingredient_of_shopping_list)
+        .put(ingredients.update_a_ingredients_of_shopping_list)
 
-    app.route('/v1/shoppingList/:shoppingListId/ingredients/:ingredientId')
-        .delete(ingredients.delete_a_ingredient_of_shopping_list);
+    app.route('/v1/actor/:actorId/shoppingList/:shoppingListId/ingredients/:ingredientId')
+        .delete(ingredients.delete_a_ingredient_of_shopping_list)
+        .put(ingredients.update_a_ingredient_of_shopping_list);
 
 };
