@@ -28,29 +28,37 @@ exports.list_all_shopping_lists_of_actor = function (req, res) {
 };
 
 exports.create_a_shopping_List_for_a_actor = function (req, res) {
-    Actor.find({
-        "_id": req.params.actorId,
-    }, function (err, actor) {
-        if (err) {
+    ShoppingList.findById(req.params.actorId, function(err, step) {
+        if (err){
             res.status(500).send(err);
-        } else {
-            let shoppingListTemp = actor[0].shoppingList
-            shoppingListTemp.push(req.body)
-            const update = {
-                shoppingList: shoppingListTemp
-            }
-            Actor.findOneAndUpdate({
-                    "_id": req.params.recipeId,
-                }, update, {new: true}, function (err, result) {
-                    if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        res.json(result)
-                    }
-                }
-            )
+        }
+        else{
+            res.json(step);
         }
     });
+    // Actor.find({
+    //     "_id": req.params.actorId,
+    // }, function (err, actor) {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     } else {
+    //         let shoppingListTemp = actor[0].shoppingList
+    //         shoppingListTemp.push(req.body)
+    //         const update = {
+    //             shoppingList: shoppingListTemp
+    //         }
+    //         Actor.findOneAndUpdate({
+    //                 "_id": req.params.recipeId,
+    //             }, update, {new: true}, function (err, result) {
+    //                 if (err) {
+    //                     res.status(500).send(err);
+    //                 } else {
+    //                     res.json(result)
+    //                 }
+    //             }
+    //         )
+    //     }
+    // });
 };
 
 

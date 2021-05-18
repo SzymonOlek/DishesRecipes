@@ -40,29 +40,36 @@ exports.list_all_ingredients_of_recipe = function (req, res) {
 };
 
 exports.create_a_ingredient_of_recipe = function (req, res) {
-    Recipe.find({
-        "_id": req.params.recipeId,
-    }, function (err, recipe) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            let ingredientTemp = recipe[0].ingredients
-            ingredientTemp.push(req.body)
-            const update = {
-                ingredients: ingredientTemp
-            }
-            Recipe.findOneAndUpdate({
-                    "_id": req.params.recipeId,
-                }, update, {new: true}, function (err, result) {
-                    if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        res.json(result)
-                    }
-                }
-            )
+    Recipe.updateOne({
+            "_id": req.params.recipeId,
+        },
+        {
+            $push: {ingredients:req.body}
         }
-    });
+    )
+    // Recipe.find({
+    //     "_id": req.params.recipeId,
+    // }, function (err, recipe) {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     } else {
+    //         let ingredientTemp = recipe[0].ingredients
+    //         ingredientTemp.push(req.body)
+    //         const update = {
+    //             ingredients: ingredientTemp
+    //         }
+    //         Recipe.findOneAndUpdate({
+    //                 "_id": req.params.recipeId,
+    //             }, update, {new: true}, function (err, result) {
+    //                 if (err) {
+    //                     res.status(500).send(err);
+    //                 } else {
+    //                     res.json(result)
+    //                 }
+    //             }
+    //         )
+    //     }
+    // });
 };
 
 exports.update_a_ingredient_of_recipe = async function (req, res) {

@@ -7,10 +7,10 @@ module.exports = function (app) {
         .post(recipes.create_a_recipe);
 
     app.route('/v1/myrecipes')
-        .get(recipes.list_my_recipe)
+        .get(recipes.list_my_recipe);
 
     app.route('/v1/recipes/search')
-        .get(recipes.search_recipe)
+        .get(recipes.search_recipe);
 
     app.route('/v1/recipes/:recipeId')
         .get(recipes.read_a_recipe)
