@@ -11,7 +11,7 @@ exports.list_all_recipes = function(req, res) {
         else{
             res.json(recipe);
         }
-    });
+    }).limit(200);
 };
 
 exports.list_my_recipe= function(req, res) { // todo 
