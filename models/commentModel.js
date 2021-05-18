@@ -11,13 +11,13 @@ var CommentSchema = new Schema({
     type: String,
     default: ''
   },
-  body: {
+  review: {
     type: String,
     required: 'Kindly enter your comments'
   },
-  stars: {
+  rating: {
     type: Number,
-    required: 'Kindly enter the stars',
+    required: 'Kindly enter the rating',
     min: 0, max: 5
   },
   created: {
