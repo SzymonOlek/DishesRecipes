@@ -5,10 +5,11 @@ var Schema = mongoose.Schema;
 var CommentSchema = new Schema({
   title: {
     type: String,
-    required: 'Kindly enter the title of the comment'
+    default: ''
   },
   author:{
-    type: String
+    type: String,
+    default: ''
   },
   body: {
     type: String,

@@ -32,7 +32,7 @@ var RecipeSchema = new Schema({
   },
   picture: {
     data: Buffer,
-    contentType: String
+    contentType: String,
   },
   preparationTime: {
     type: Number,
@@ -63,12 +63,14 @@ var RecipeSchema = new Schema({
     min: 0,
   },
   linkVideo: {
-    type: String
+    type: String,
+    default: null,
   },
   category: [category.CategorySchema],
   comments: [comment.CommentScheme],
   steps: [steps.StepSchema],
   ingredients: [ingredient.IngredientsSchema],
+
   created: {
     type: Date,
     default: Date.now

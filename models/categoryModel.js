@@ -7,10 +7,6 @@ var CategorySchema = new Schema({
     type: String,
     required: 'Kindly enter the name of the Category'
   },
-  description: {
-    type: String,
-    required: 'Kindly enter the description of the Category'
-  },
   created: {
     type: Date,
     default: Date.now

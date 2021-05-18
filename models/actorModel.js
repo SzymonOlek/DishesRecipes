@@ -35,11 +35,21 @@ var ActorSchema = new Schema({
   role: [{
     type: String,
     required: 'Kindly enter the user role(s)',
-    enum: ['CUSTOMER', 'ADMINISTRATOR']
+    enum: ['CUSTOMER', 'ADMINISTRATOR'],
+    default: 'CUSTOMER'
   }],
-  createdRecipes : [createdRecipes.CreatedRecipesSchema],
-  favouriteLists : [favouriteList.FavouriteListSchema],
-  shoppingList : [shoppingList.shoppingListSchema],
+  createdRecipes : {
+    type: [createdRecipes.CreatedRecipesSchema],
+    default: [],
+  },
+  favouriteLists : {
+    type: [favouriteList.FavouriteListSchema],
+    default: [],
+  },
+  shoppingList :{
+    type: [shoppingList.shoppingListSchema],
+    default: [],
+  },
   created: {
     type: Date,
     default: Date.now
