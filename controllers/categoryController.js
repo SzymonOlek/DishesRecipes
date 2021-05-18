@@ -5,14 +5,8 @@ var mongoose = require('mongoose'),
 
 
 exports.list_all_categories = async function (req, res) {
-    var cate = await Recipe
-        .find({})
-        .populate({
-            path: 'categories',
-            match: {},
-            select: 'name'
-        })
-    //res.json(cate);
+    var x = await Recipe.distinct("category.name");
+    res.json(x);
 };
 
 
