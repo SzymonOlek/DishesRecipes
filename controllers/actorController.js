@@ -31,70 +31,45 @@ exports.create_an_actor = function(req, res) {
     });
 };
 
-//sprawdzic \/
+
 exports.read_an_actor = function(req, res) {
-    Actor.findById(req.params.actorId)
-        .then((actor) => {
-            var element = actor.find((rep, index) => {
-                if (rep.id == req.params.actorId)
-                    return rep
-            });
-            var idx = actor.indexOf(element)
-            if (idx !== -1) {
-                res.json(actor[idx]);
-            }
-        })
-        .catch(e => res.status(400).send(e));
+    Actor.find({_id : req.params.actorId}, function(err, actor) {
+        if (err){
+            res.status(500).send(err);
+        }
+        else{
+            res.json(actor);
+        }
+    });
 };
+
 
 exports.update_an_actor = async function(req, res) {
-    const update = {
-        actors: req.body
-    }
-    let result = await Actor.findOneAndUpdate({
-        "_id": req.params.actorId,
-    }, update, {new: true})
-    res.json(result)
-
-    // Actor.findOneAndUpdate({_id: req.params.actorId}, req.body, {new: true}, function(err, actor) {
-    //     if (err){
-    //         if(err.name=='ValidationError') {
-    //             res.status(422).send(err);
-    //         }
-    //         else{
-    //             res.status(500).send(err);
-    //         }
-    //     }
-    //     else{
-    //         res.json(actor);
-    //     }
-    // });
-};
-//sprawdzic \/
-exports.delete_an_actor = function(req, res) {
-    Actor.findById(req.params.actorId)
-        .then((actor) => {
-            var element = actor.actors.find((rep, index) => {
-                if (rep.id == req.params.categoryId)
-                    return rep
-            });
-            var idx = actor.actors.indexOf(element)
-            if (idx !== -1) {
-                actor.actors.splice(idx, 1);
-                return actor.save();
+    Actor.updateOne({_id: req.params.actorId}, req.body, {new: true}, function(err, actor) {
+        if (err){
+            if(err.name === 'ValidationError') {
+                res.status(422).send(err);
             }
-        })
-        .then((recipe) => {
-            res.json({ message: 'Actor successfully deleted' });
-        })
-        .catch(e => res.status(400).send(e));
+            else{
+                res.status(500).send(err);
+            }
+        }
+        else{
+            res.json(actor);
+        }
+    });
+};
 
-    // Actor.deleteOne({_id: req.params.actorId}, function(err, actor) {
-    //     if (err){
-    //         res.status(500).send(err);
-    //     }
-    //     else{
-    //         res.json({ message: 'Actor successfully deleted' });
-    //     }
-    // });
+
+exports.delete_an_actor = function(req, res) {
+    Actor.deleteOne({
+        _id: req.params.actorId
+    }, function(err, actor) {
+        if (err){
+            res.status(500).send(err);
+        }
+        else{
+            res.json({ message: 'Actor successfully deleted' });
+        }
+    });
 };

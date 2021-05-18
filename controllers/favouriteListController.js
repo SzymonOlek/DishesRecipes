@@ -1,7 +1,6 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    FavouriteList = mongoose.model('FavouriteList'),
     Actor = mongoose.model('Actors');
 
 exports.list_all_favourite_lists = async function(req, res) {

@@ -1,7 +1,6 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    CreatedRecipes = mongoose.model('CreatedRecipes'),
     Actor = mongoose.model('Actors');
 
 exports.list_all_create_recipes = async function(req, res) {

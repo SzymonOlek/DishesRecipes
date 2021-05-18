@@ -1,7 +1,6 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Comment = mongoose.model('Comments'),
     Recipe = mongoose.model('Recipes');
 
 exports.list_all_comments = async function (req, res) {
@@ -47,6 +46,7 @@ exports.update_a_comments_of_recipe = async function (req, res) {
     res.json(result)
 };
 
+
 exports.update_a_comment_of_recipe = async function (req, res) {
     Recipe.findById(req.params.recipeId)
         .then((recipe) => {
@@ -66,6 +66,7 @@ exports.update_a_comment_of_recipe = async function (req, res) {
         .catch(e => res.status(400).send(e));
 };
 
+
 exports.delete_a_comment_of_recipe = function (req, res) {
     Recipe.findById(req.params.recipeId)
         .then((recipe) => {
@@ -84,6 +85,7 @@ exports.delete_a_comment_of_recipe = function (req, res) {
         })
         .catch(e => res.status(400).send(e));
 };
+
 
 exports.read_a_comment_of_recipe = function (req, res) {
     Recipe.findById(req.params.recipeId)

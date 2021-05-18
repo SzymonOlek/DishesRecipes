@@ -1,8 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Ingredients = mongoose.model('Ingredients'),
-    Quantity = mongoose.model('Quantity');
+    Ingredients = mongoose.model('Ingredients');
 
 exports.list_all_quantity = async function(req, res) {
     var x = await Ingredients.distinct("quantity");
