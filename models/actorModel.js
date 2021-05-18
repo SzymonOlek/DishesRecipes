@@ -5,7 +5,7 @@ var bcrypt = require('bcrypt');
 
 var createdRecipes = require('./createdRecipesModel');
 var favouriteList = require('./favouriteListModel');
-
+var shoppingList = require('./shoppingListModel');
 var ActorSchema = new Schema({
   nick: {
     type: String,
@@ -39,6 +39,7 @@ var ActorSchema = new Schema({
   }],
   createdRecipes : [createdRecipes.CreatedRecipesSchema],
   favouriteLists : [favouriteList.FavouriteListSchema],
+  shoppingList : [shoppingList.shoppingListSchema],
   created: {
     type: Date,
     default: Date.now
