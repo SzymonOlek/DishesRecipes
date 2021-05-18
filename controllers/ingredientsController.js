@@ -5,17 +5,12 @@ var mongoose = require('mongoose'),
     Recipe = mongoose.model('Recipes'),
     ShoppingList = mongoose.model('ShoppingList');
 
-exports.list_all_ingredients = function(req, res) {
-    Ingredient.find({}, function(err, ingredient) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(ingredient);
-        }
-    });
+exports.list_all_ingredients = async function(req, res) {
+    var x = await Recipe.distinct("ingredients.name");
+    res.json(x);
 };
 
+//chyba nie potrzebne \/
 exports.read_an_ingredient = function(req, res) {
     Ingredient.findById(req.params.ingredientId, function(err, ingredient) {
         if (err){
@@ -26,6 +21,7 @@ exports.read_an_ingredient = function(req, res) {
         }
     });
 };
+
 
 exports.list_all_ingredients_of_recipe = function (req, res) {
     Recipe.find({

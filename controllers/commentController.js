@@ -4,16 +4,12 @@ var mongoose = require('mongoose'),
     Comment = mongoose.model('Comments'),
     Recipe = mongoose.model('Recipes');
 
-exports.list_all_comments = function (req, res) {
-    Comment.find({}, function (err, comments) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(comments);
-        }
-    });
+exports.list_all_comments = async function (req, res) {
+    var x = await Recipe.distinct("comments");
+    res.json(x);
 };
 
+//chyba niepotrzebne \/
 exports.read_a_comment = function (req, res) {
     Comment.findById(req.params.commentId, function (err, comment) {
         if (err) {

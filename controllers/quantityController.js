@@ -4,17 +4,12 @@ var mongoose = require('mongoose'),
     Ingredients = mongoose.model('Ingredients'),
     Quantity = mongoose.model('Quantity');
 
-exports.list_all_quantity = function(req, res) {
-    Quantity.find({}, function(err, quantity) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(quantity);
-        }
-    });
+exports.list_all_quantity = async function(req, res) {
+    var x = await Ingredients.distinct("quantity");
+    res.json(x);
 };
 
+//Chyba nie potrzebne \/
 exports.create_a_quantity = function(req, res) {
     var new_quantity = new Quantity(req.body);
     new_quantity.save(function(err, quantity) {
@@ -31,6 +26,7 @@ exports.create_a_quantity = function(req, res) {
         }
     });
 };
+
 
 exports.list_quantity_of_Ingredient = function (req, res) {
     Ingredients.findOne({
@@ -89,6 +85,7 @@ exports.create_a_quantity_of_ingredient = function (req, res) {
 //    });
 //};
 
+//Chyba nie potrzebne \/
 exports.update_a_quantity = function(req, res) {
     Quantity.findOneAndUpdate({_id: req.params.quantityId}, req.body, {new: true}, function(err, quantity) {
         if (err){
@@ -115,6 +112,7 @@ exports.update_a_quantity_of_ingredient = async function (req, res) {
     res.json(result)
 };
 
+//Chyba nie potrzebne \/
 exports.delete_a_quantity = function(req, res) {
     Quantity.deleteOne({_id: req.params.quantityId}, function(err, quantity) {
         if (err){

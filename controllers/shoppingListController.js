@@ -4,15 +4,9 @@ var mongoose = require('mongoose'),
     ShoppingList = mongoose.model('ShoppingList'),
     Actor = mongoose.model('Actors');
 
-exports.list_all_shopping_lists = function(req, res) {
-    ShoppingList.find({}, function(err, shoppingList) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(shoppingList);
-        }
-    });
+exports.list_all_shopping_lists = async function(req, res) {
+        var x = await Actor.distinct("shoppingList");
+        res.json(x);
 };
 
 exports.list_all_shopping_lists_of_actor = function (req, res) {

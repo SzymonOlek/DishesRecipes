@@ -4,17 +4,12 @@ var mongoose = require('mongoose'),
     FavouriteList = mongoose.model('FavouriteList'),
     Actor = mongoose.model('Actors');
 
-exports.list_all_favourite_lists = function(req, res) {
-    FavouriteList.find({}, function(err, favouriteList) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(favouriteList);
-        }
-    });
+exports.list_all_favourite_lists = async function(req, res) {
+    var x = await Actor.distinct("favouriteList");
+    res.json(x);
 };
 
+//chyba nie potrzebne \/
 exports.read_a_favourite_list = function(req, res) {
     FavouriteList.findById(req.params.recipeId, function(err, favouriteList) {
         if (err){
@@ -26,7 +21,7 @@ exports.read_a_favourite_list = function(req, res) {
     });
 };
 
-exports.read_favourite_list_of_actor= function (req, res) {
+exports.read_favourite_list_of_actor = function (req, res) {
     Actor.find({
         "_id": req.params.actorId,
     }, function (err, actor) {

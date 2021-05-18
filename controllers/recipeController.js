@@ -4,15 +4,9 @@ var mongoose = require('mongoose'),
     Recipe = mongoose.model('Recipes'),
     Actor = mongoose.model('Actors');
 
-exports.list_all_recipes = function(req, res) {
-    Recipe.find({}, function(err, recipe) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(recipe);
-        }
-    }).limit(200);
+exports.list_all_recipes = async function(req, res) {
+    var x = await Recipe.distinct("recipe.name");
+    res.json(x);
 };
 
 exports.list_my_recipe = async function(req, res) { // todo
@@ -100,48 +94,75 @@ exports.create_a_recipe = function(req, res) {
     });
 };
 
-
+//sprawdzic \/
 exports.read_a_recipe = function(req, res) {
-    Recipe.find({_id : req.params.recipeId}, function(err, recipe) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            console.log(recipe);
-            res.json(recipe);
-        }
-    });
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+            var element = recipe.recipes.find((rep, index) => {
+                if (rep.id == req.params.recipeId)
+                    return rep
+            });
+            var idx = recipe.recipes.indexOf(element)
+            if (idx !== -1) {
+                res.json(recipe.recipes[idx]);
+            }
+        })
+        .catch(e => res.status(400).send(e));
 };
 
 
-exports.update_a_recipe = function(req, res) {
-    Recipe.updateOne({_id: req.params.recipeId}, req.body, {new: true}, function(err, recipe) {
-        if (err){
-            if(err.name=='ValidationError') {
-                res.status(422).send(err);
-            }
-            else{
-                res.status(500).send(err);
-            }
-        }
-        else{
-            res.json(recipe);
-        }
-    });
+exports.update_a_recipe = async function(req, res) {
+    const update = {
+        recipes: req.body
+    }
+    let result = await Recipe.findOneAndUpdate({
+        "_id": req.params.recipeId,
+    }, update, {new: true})
+    res.json(result)
+
+    // Recipe.updateOne({_id: req.params.recipeId}, req.body, {new: true}, function(err, recipe) {
+    //     if (err){
+    //         if(err.name=='ValidationError') {
+    //             res.status(422).send(err);
+    //         }
+    //         else{
+    //             res.status(500).send(err);
+    //         }
+    //     }
+    //     else{
+    //         res.json(recipe);
+    //     }
+    // });
 };
 
 
 exports.delete_a_recipe = function(req, res) {
-    Recipe.deleteOne({
-        _id: req.params.recipeId
-    }, function(err, recipe) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+            var element = recipe.recipes.find((rep, index) => {
+                if (rep.id == req.params.categoryId)
+                    return rep
+            });
+            var idx = recipe.recipes.indexOf(element)
+            if (idx !== -1) {
+                recipe.recipes.splice(idx, 1);
+                return recipe.save();
+            }
+        })
+        .then((recipe) => {
             res.json({ message: 'Recipe successfully deleted' });
-        }
-    });
+        })
+        .catch(e => res.status(400).send(e));
+    // Recipe.deleteOne({
+    //     _id: req.params.recipeId
+    // }, function(err, recipe) {
+    //     if (err){
+    //         res.status(500).send(err);
+    //     }
+    //     else{
+    //         res.json({ message: 'Recipe successfully deleted' });
+    //     }
+    // });
 };
 
 

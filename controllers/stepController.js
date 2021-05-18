@@ -4,15 +4,9 @@ var mongoose = require('mongoose'),
     Step = mongoose.model('Step'),
     Recipe = mongoose.model('Recipes');
 
-exports.list_all_steps = function(req, res) {
-    Step.find({}, function(err, step) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(step);
-        }
-    });
+exports.list_all_steps = async function(req, res) {
+    var x = await Recipe.distinct("steps");
+    res.json(x);
 };
 
 exports.list_all_steps_of_recipe = function (req, res) {
