@@ -114,7 +114,7 @@ exports.read_a_recipe = function(req, res) {
 
 
 exports.update_a_recipe = function(req, res) {
-    Recipe.findOneAndUpdate({_id: req.params.recipeId}, req.body, {new: true}, function(err, recipe) {
+    Recipe.updateOne({_id: req.params.recipeId}, req.body, {new: true}, function(err, recipe) {
         if (err){
             if(err.name=='ValidationError') {
                 res.status(422).send(err);
