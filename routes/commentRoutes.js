@@ -11,9 +11,10 @@ module.exports = function (app) {
     app.route('/v1/recipes/:recipeId/comments')
         .get(comments.list_all_comments_of_recipe)
         .post(comments.create_a_comment_of_recipe)
-        .put(comments.update_a_comment_of_recipe)
+        .put(comments.update_a_comments_of_recipe)
 
     app.route('/v1/recipes/:recipeId/comments/:commentId')
         .delete(comments.delete_a_comment_of_recipe)
+        // .put(comments.update_a_comment_of_recipe)
 
 };
