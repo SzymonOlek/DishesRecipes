@@ -15,5 +15,4 @@ module.exports = function (app) {
 
     app.route('/v1/recipes/:recipeId/steps/:stepsId')
         .delete(steps.delete_a_step_of_recipe);
-
 };
