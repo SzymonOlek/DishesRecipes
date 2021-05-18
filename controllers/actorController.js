@@ -4,8 +4,14 @@ var mongoose = require('mongoose'),
     Actor = mongoose.model('Actors');
 
 exports.list_all_actors = async function(req, res) {
-    var x = await Actor.distinct("actor.name");
-    res.json(x);
+    Actor.find({}, function(err, actor) {
+        if (err){
+            res.status(500).send(err);
+        }
+        else{
+            res.json(actor);
+        }
+    }).limit(200);
 };
 
 exports.create_an_actor = function(req, res) {

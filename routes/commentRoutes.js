@@ -13,6 +13,6 @@ module.exports = function (app) {
     app.route('/v1/recipes/:recipeId/comments/:commentId')
         .delete(comments.delete_a_comment_of_recipe)
         .put(comments.update_a_comment_of_recipe)
-        //.get(comments.read_a_comment_of_recipe) to do
+        .get(comments.read_a_comment_of_recipe)
 
 };

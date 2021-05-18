@@ -9,16 +9,6 @@ exports.list_all_comments = async function (req, res) {
     res.json(x);
 };
 
-//chyba niepotrzebne \/
-exports.read_a_comment = function (req, res) {
-    Comment.findById(req.params.commentId, function (err, comment) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(comment);
-        }
-    });
-};
 
 exports.list_all_comments_of_recipe = function (req, res) {
     Recipe.find({
@@ -27,20 +17,25 @@ exports.list_all_comments_of_recipe = function (req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(recipe[0].comments);
+            res.json(recipe.comments);
         }
     });
 };
 
+
 exports.create_a_comment_of_recipe = function (req, res) {
-    Recipe.updateOne({
-            "_id": req.params.recipeId,
-        },
-        {
-            $push: {comments:req.body}
-        }
-    )
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+                recipe.comment.push(req.body);
+                return recipe.save();
+            }
+        )
+        .then((recipe) => {
+            res.json({message: 'Comment successfully created'});
+        })
+        .catch(e => res.status(400).send(e));
 };
+
 
 exports.update_a_comments_of_recipe = async function (req, res) {
     const update = {
@@ -86,6 +81,21 @@ exports.delete_a_comment_of_recipe = function (req, res) {
         })
         .then((recipe) => {
             res.json({message: 'Comment successfully deleted'});
+        })
+        .catch(e => res.status(400).send(e));
+};
+
+exports.read_a_comment_of_recipe = function (req, res) {
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+            var element = recipe.comment.find((cat, index) => {
+                if (cat.id == req.params.commentId)
+                    return cat
+            });
+            var idx = recipe.comment.indexOf(element)
+            if (idx !== -1) {
+                res.json(recipe.comment[idx]);
+            }
         })
         .catch(e => res.status(400).send(e));
 };

@@ -9,80 +9,33 @@ exports.list_all_shopping_lists = async function(req, res) {
         res.json(x);
 };
 
+
 exports.list_all_shopping_lists_of_actor = function (req, res) {
     Actor.findOne({
         "_id": req.params.actorId,
-    }, function (err, recipe) {
+    }, function (err, actor) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(actor[0].shoppingList);
+            res.json(actor.shoppingList);
         }
     });
 };
+
 
 exports.add_element_to_a_shopping_List_for_a_actor = function (req, res) {
-    ShoppingList.findById(req.params.actorId, function(err, step) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(step);
-        }
-    });
-    // Actor.find({
-    //     "_id": req.params.actorId,
-    // }, function (err, actor) {
-    //     if (err) {
-    //         res.status(500).send(err);
-    //     } else {
-    //         let shoppingListTemp = actor[0].shoppingList
-    //         shoppingListTemp.push(req.body)
-    //         const update = {
-    //             shoppingList: shoppingListTemp
-    //         }
-    //         Actor.findOneAndUpdate({
-    //                 "_id": req.params.recipeId,
-    //             }, update, {new: true}, function (err, result) {
-    //                 if (err) {
-    //                     res.status(500).send(err);
-    //                 } else {
-    //                     res.json(result)
-    //                 }
-    //             }
-    //         )
-    //     }
-    // });
-};
-
-
-
-exports.read_a_shopping_list = function(req, res) {
-    ShoppingList.findById(req.params.recipeId, function(err, shoppingList) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(shoppingList);
-        }
-    });
-};
-
-exports.update_a_shopping_list = function(req, res) {
-    ShoppingList.findOneAndUpdate({_id: req.params.shoppingListId}, req.body, {new: true}, function(err, shoppingList) {
-        if (err){
-            if(err.name=='ValidationError') {
-                res.status(422).send(err);
+    Actor.findById(req.params.actorId)
+        .then((actor) => {
+                actor.shoppingList.push(req.body);
+                return actor.save();
             }
-            else{
-                res.status(500).send(err);
-            }
-        }
-        else{
-            res.json(shoppingList);
-        }
-    });
+        )
+        .then((actor) => {
+            res.json({message: 'Successfully add to shopping list'});
+        })
+        .catch(e => res.status(400).send(e));
 };
+
 
 exports.update_a_shopping_lists_of_actor = async function (req, res) {
     const update = {
@@ -94,35 +47,17 @@ exports.update_a_shopping_lists_of_actor = async function (req, res) {
     res.json(result)
 };
 
-exports.update_element_in_shopping_list_of_actor = async function (req, res) {
-    ShoppingList.findById(req.params.shoppingListId)
-        .then((recipe) => {
-            var element = recipe.step.find((value, index) => {
-                if (value.id == req.params.stepId)
-                    return value
-            });
-            var idx = recipe.step.indexOf(element)
-            if (idx !== -1) {
-                recipe.step[idx] = req.body;
-                return recipe.save();
-            }
+
+exports.delete_shopping_list_of_actor = function (req, res) {
+    Actor.findById(req.params.actorId)
+        .then((actor) => {
+            actor.shoppingList = [];
+            return actor.save();
         })
         .then((recipe) => {
-            res.json({message: 'Step successfully updated'});
+            res.json({ message: 'Shopping List successfully deleted' });
         })
         .catch(e => res.status(400).send(e));
-};
-
-
-exports.delete_a_shopping_list = function(req, res) {
-    ShoppingList.deleteOne({_id: req.params.shoppingListId}, function(err, shoppingList) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json({ message: 'ShoppingList successfully deleted' });
-        }
-    });
 };
 
 exports.delete_element_in_shopping_list_of_actor = function (req, res) {
@@ -144,14 +79,26 @@ exports.delete_element_in_shopping_list_of_actor = function (req, res) {
         .catch(e => res.status(400).send(e));
 };
 
-exports.delete_shopping_list_of_actor = function (req, res) {
-    Actor.findById(req.params.actorId)
-        .then((actor) => {
-                actor.shoppingList = [];
-                return actor.save();
+
+exports.update_element_in_shopping_list_of_actor = async function (req, res) {
+    ShoppingList.findById(req.params.shoppingListId)
+        .then((recipe) => {
+            var element = recipe.step.find((value, index) => {
+                if (value.id == req.params.stepId)
+                    return value
+            });
+            var idx = recipe.step.indexOf(element)
+            if (idx !== -1) {
+                recipe.step[idx] = req.body;
+                return recipe.save();
+            }
         })
         .then((recipe) => {
-            res.json({ message: 'Shopping List successfully deleted' });
+            res.json({message: 'Step successfully updated'});
         })
         .catch(e => res.status(400).send(e));
 };
+
+
+
+

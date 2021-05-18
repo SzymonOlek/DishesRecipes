@@ -9,17 +9,6 @@ exports.list_all_create_recipes = async function(req, res) {
     res.json(x);
 };
 
-//chyba niepotrzebne \/
-exports.read_a_created_recipe = function(req, res) {
-    CreatedRecipes.findById(req.params.recipeId, function(err, createdRecipe) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json(createdRecipe);
-        }
-    });
-};
 
 exports.list_all_created_recipes_of_actor= function (req, res) {
     Actor.find({
@@ -28,43 +17,25 @@ exports.list_all_created_recipes_of_actor= function (req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(actor[0].createdRecipes);
+            res.json(actor.createdRecipes);
         }
     });
 };
 
+
 exports.add_a_created_recipe_of_actor = function (req, res) {
-    Actor.updateOne({
-            "_id": req.params.actorId,
-        },
-        {
-            $push: {createdRecipes:req.body}
-        }
-    )
-    // Actor.find({
-    //     "_id": req.params.actorId,
-    // }, function (err, actor) {
-    //     if (err) {
-    //         res.status(500).send(err);
-    //     } else {
-    //         let createdRecipesTemp = actor[0].createdRecipes
-    //         createdRecipesTemp.push(req.body)
-    //         const update = {
-    //             createdRecipes: createdRecipesTemp
-    //         }
-    //         Actor.findOneAndUpdate({
-    //                 "_id": req.params.actorId,
-    //             }, update, {new: true}, function (err, result) {
-    //                 if (err) {
-    //                     res.status(500).send(err);
-    //                 } else {
-    //                     res.json(result)
-    //                 }
-    //             }
-    //         )
-    //     }
-    // });
+    Actor.findById(req.params.actorId)
+        .then((actor) => {
+                actor.createdRecipes.push(req.body);
+                return actor.save();
+            }
+        )
+        .then((actor) => {
+            res.json({message: 'Successfully add to created recipes list'});
+        })
+        .catch(e => res.status(400).send(e));
 };
+
 
 exports.clear_a_created_recipe_of_actor = async function (req, res) {
     Actor.findById(req.params.actorId)
@@ -73,10 +44,11 @@ exports.clear_a_created_recipe_of_actor = async function (req, res) {
             return actor.save();
         })
         .then((recipe) => {
-            res.json({ message: 'CreatedRecipes successfully deleted' });
+            res.json({ message: 'Created recipes successfully deleted' });
         })
         .catch(e => res.status(400).send(e));
 };
+
 
 exports.delete_a_created_recipe_of_actor = function (req, res) {
     Actor.findById(req.params.actorId)

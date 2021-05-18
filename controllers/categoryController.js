@@ -17,20 +17,23 @@ exports.list_all_categories_of_recipe = function (req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(recipe[0].category);
+            res.json(recipe.category);
         }
     });
 };
 
 
 exports.create_a_category_of_recipe = function (req, res) {
-    Recipe.updateOne({
-            "_id": req.params.recipeId,
-        },
-        {
-            $push: {category:req.body}
-        }
-    )
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+                recipe.category.push(req.body);
+                return recipe.save();
+            }
+        )
+        .then((recipe) => {
+            res.json({message: 'Category successfully created'});
+        })
+        .catch(e => res.status(400).send(e));
 };
 
 exports.update_a_categories_of_recipe = async function (req, res) {
@@ -43,6 +46,7 @@ exports.update_a_categories_of_recipe = async function (req, res) {
     res.json(result)
 };
 
+
 exports.update_a_category_of_recipe = async function (req, res) {
     Recipe.findById(req.params.recipeId)
         .then((recipe) => {
@@ -50,7 +54,6 @@ exports.update_a_category_of_recipe = async function (req, res) {
                 if (value.id == req.params.categoryId)
                     return value
             });
-            console.log("here")
             var idx = recipe.category.indexOf(element)
             if (idx !== -1) {
                 recipe.category[idx] = req.body;
@@ -62,6 +65,7 @@ exports.update_a_category_of_recipe = async function (req, res) {
         })
         .catch(e => res.status(400).send(e));
 };
+
 
 exports.delete_a_category_of_recipe = function (req, res) {
     Recipe.findById(req.params.recipeId)
@@ -82,7 +86,8 @@ exports.delete_a_category_of_recipe = function (req, res) {
         .catch(e => res.status(400).send(e));
 };
 
-exports.read_a_category = function (req, res) {
+
+exports.read_a_category_of_recipe = function (req, res) {
     Recipe.findById(req.params.recipeId)
         .then((recipe) => {
             var element = recipe.category.find((cat, index) => {

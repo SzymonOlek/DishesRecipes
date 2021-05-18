@@ -9,6 +9,7 @@ exports.list_all_steps = async function(req, res) {
     res.json(x);
 };
 
+
 exports.list_all_steps_of_recipe = function (req, res) {
     Recipe.findOne({
         "_id": req.params.recipeId,
@@ -16,90 +17,24 @@ exports.list_all_steps_of_recipe = function (req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(recipe[0].step);
+            res.json(recipe.step);
         }
     });
 };
 
-// Usunac? \/
-//exports.create_a_step = function(req, res) {
-//    var new_step = new Step(req.body);
-//    new_step.save(function(err, step) {
-//        if (err){
-//            if(err.name=='ValidationError') {
-//                res.status(422).send(err);
-//            }
-//            else{
-//                res.status(500).send(err);
-//            }
-//        }
-//        else{
-//            res.json(step);
-//        }
-//    });
-//};
 
 exports.create_a_step_of_recipe = function (req, res) {
-    Recipe.updateOne({
-            "_id": req.params.recipeId,
-        },
-        {
-            $push: {step:req.body}
-        }
-    )
-    // Recipe.find({
-    //     "_id": req.params.recipeId,
-    // }, function (err, recipe) {
-    //     if (err) {
-    //         res.status(500).send(err);
-    //     } else {
-    //         let stepTemp = recipe[0].step
-    //         stepTemp.push(req.body)
-    //         const update = {
-    //             step: stepTemp
-    //         }
-    //         Recipe.findOneAndUpdate({
-    //                 "_id": req.params.recipeId,
-    //             }, update, {new: true}, function (err, result) {
-    //                 if (err) {
-    //                     res.status(500).send(err);
-    //                 } else {
-    //                     res.json(result)
-    //                 }
-    //             }
-    //         )
-    //     }
-    // });
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+                recipe.step.push(req.body);
+                return recipe.save();
+            }
+        )
+        .then((recipe) => {
+            res.json({message: 'Step successfully created'});
+        })
+        .catch(e => res.status(400).send(e));
 };
-
-exports.read_a_step = function(req, res) {
-    Step.findById(req.params.recipeId, function(err, step) {
-        if (err){
-            res.status(500).send(err);
-                    }
-        else{
-            res.json(step);
-        }
-    });
-};
-
-
-//usunac? \/
-//exports.update_a_step = function(req, res) {
-//    Step.findOneAndUpdate({_id: req.params.stepId}, req.body, {new: true}, function(err, step) {
-//        if (err){
-//            if(err.name=='ValidationError') {
-//                res.status(422).send(err);
-//            }
-//            else{
-//res.status(500).send(err);
-//            }
-//        }
-//        else{
-//            res.json(step);
-//        }
-//    });
-//};
 
 
 exports.update_a_steps_of_recipe = async function (req, res) {
@@ -111,6 +46,7 @@ exports.update_a_steps_of_recipe = async function (req, res) {
     }, update, {new: true})
     res.json(result)
 };
+
 
 exports.update_a_step_of_recipe = async function (req, res) {
     Recipe.findById(req.params.recipeId)

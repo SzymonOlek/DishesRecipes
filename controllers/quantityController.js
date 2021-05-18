@@ -9,24 +9,6 @@ exports.list_all_quantity = async function(req, res) {
     res.json(x);
 };
 
-//Chyba nie potrzebne \/
-exports.create_a_quantity = function(req, res) {
-    var new_quantity = new Quantity(req.body);
-    new_quantity.save(function(err, quantity) {
-        if (err){
-            if(err.name=='ValidationError') {
-                res.status(422).send(err);
-            }
-            else{
-                res.status(500).send(err);
-            }
-        }
-        else{
-            res.json(quantity);
-        }
-    });
-};
-
 
 exports.list_quantity_of_Ingredient = function (req, res) {
     Ingredients.findOne({
@@ -35,72 +17,25 @@ exports.list_quantity_of_Ingredient = function (req, res) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.json(ingredients[0].quantity);
+            res.json(ingredients.quantity);
         }
     });
 };
+
 
 exports.create_a_quantity_of_ingredient = function (req, res) {
-    Ingredients.updateOne({
-            "_id": req.params.ingredientId,
-        },
-        {
-            $push: {quantity:req.body}
-        }
-    )
-    // Ingredients.find({
-    //     "_id": req.params.ingredientsId,
-    // }, function (err, ingredient) {
-    //     if (err) {
-    //         res.status(500).send(err);
-    //     } else {
-    //         let quantityTemp = ingredient[0].quantity
-    //         quantityTemp.push(req.body)
-    //         const update = {
-    //             quantity: quantityTemp
-    //         }
-    //         Ingredients.findOneAndUpdate({
-    //                 "_id": req.params.ingredientsId,
-    //             }, update, {new: true}, function (err, result) {
-    //                 if (err) {
-    //                     res.status(500).send(err);
-    //                 } else {
-    //                     res.json(result)
-    //                 }
-    //             }
-    //         )
-    //     }
-    // });
+    Ingredients.findById(req.params.ingredientId)
+        .then((ingredients) => {
+            ingredients.quantity.push(req.body);
+                return ingredients.save();
+            }
+        )
+        .then((ingredients) => {
+            res.json({message: 'Ingredients successfully created'});
+        })
+        .catch(e => res.status(400).send(e));
 };
 
-//usunac
-//exports.read_a_quantity = function(req, res) {
-//    Quantity.findById(req.params.recipeId, function(err, quantity) {
-//        if (err){
-//            res.status(500).send(err);
-//        }
-//        else{
-//            res.json(quantity);
-//        }
-//    });
-//};
-
-//Chyba nie potrzebne \/
-exports.update_a_quantity = function(req, res) {
-    Quantity.findOneAndUpdate({_id: req.params.quantityId}, req.body, {new: true}, function(err, quantity) {
-        if (err){
-            if(err.name=='ValidationError') {
-                res.status(422).send(err);
-            }
-            else{
-                res.status(500).send(err);
-            }
-        }
-        else{
-            res.json(quantity);
-        }
-    });
-};
 
 exports.update_a_quantity_of_ingredient = async function (req, res) {
     const update = {
@@ -112,17 +47,6 @@ exports.update_a_quantity_of_ingredient = async function (req, res) {
     res.json(result)
 };
 
-//Chyba nie potrzebne \/
-exports.delete_a_quantity = function(req, res) {
-    Quantity.deleteOne({_id: req.params.quantityId}, function(err, quantity) {
-        if (err){
-            res.status(500).send(err);
-        }
-        else{
-            res.json({ message: 'Quantity successfully deleted' });
-        }
-    });
-};
 
 exports.delete_a_quantity_of_ingredient = function (req, res) {
     Ingredient.findById(req.params.ingredientId)

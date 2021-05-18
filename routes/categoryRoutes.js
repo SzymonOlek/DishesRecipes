@@ -13,6 +13,6 @@ module.exports = function (app) {
     app.route('/v1/recipes/:recipeId/categories/:categoryId')
         .delete(categories.delete_a_category_of_recipe)
         .put(categories.update_a_category_of_recipe)
-        .get(categories.read_a_category);
+        .get(categories.read_a_category_of_recipe);
 
 };
