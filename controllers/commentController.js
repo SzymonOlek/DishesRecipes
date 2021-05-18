@@ -46,7 +46,6 @@ exports.create_a_comment_of_recipe = function (req, res) {
     )
 };
 
-
 exports.update_a_comments_of_recipe = async function (req, res) {
     const update = {
         comments: req.body
@@ -55,6 +54,25 @@ exports.update_a_comments_of_recipe = async function (req, res) {
         "_id": req.params.recipeId,
     }, update, {new: true})
     res.json(result)
+};
+
+exports.update_a_comment_of_recipe = async function (req, res) {
+    Recipe.findById(req.params.recipeId)
+        .then((recipe) => {
+            var element = recipe.comments.find((value, index) => {
+                if (value.id == req.params.commentId)
+                    return value
+            });
+            var idx = recipe.comments.indexOf(element)
+            if (idx !== -1) {
+                recipe.comments[idx] = req.body;
+                return recipe.save();
+            }
+        })
+        .then((recipe) => {
+            res.json({message: 'Comment successfully updated'});
+        })
+        .catch(e => res.status(400).send(e));
 };
 
 exports.delete_a_comment_of_recipe = function (req, res) {
