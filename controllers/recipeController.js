@@ -68,12 +68,20 @@ exports.search_recipe = function(req, res) {
         tempResult = tempResult.where('category.name').all(req.body.categories);
     }
 
-    if(req.query.stars){ // stars greater then or equal
-        tempResult = tempResult.where('stars').gte(req.query.stars);
+    if(req.query.starsGte){ // stars greater then or equal
+        tempResult = tempResult.where('stars').gte(req.query.starsGte);
     }
 
-    if(req.query.difficultLevel){ // difficultLevel lower then or equal
-        tempResult = tempResult.where('difficultLevel').lte(req.query.stars);
+    if(req.query.starsLte){ // stars lower then or equal
+        tempResult = tempResult.where('stars').gte(req.query.starsLte);
+    }
+
+    if(req.query.difficultLevelLte){ // difficultLevel lower then or equal
+        tempResult = tempResult.where('difficultLevel').lte(req.query.difficultLevelLte);
+    }
+
+    if(req.query.difficultLevelGte){ // difficultLevel greater then or equal
+        tempResult = tempResult.where('difficultLevel').gte(req.query.difficultLevelGte);
     }
 
     if(req.query.preparationTimeLte){ // preparationTime greater then or equal
