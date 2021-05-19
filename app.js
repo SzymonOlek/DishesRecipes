@@ -58,6 +58,8 @@ var shoppingListRoutes = require('./routes/shoppingListRoutes');
 shoppingListRoutes(app);
 var stepRoutes = require('./routes/stepRoutes');   
 stepRoutes(app);
+var dataWarehouse = require('./routes/dataWarehouse');
+dataWarehouse(app);
 
 mongoose.connection.on("open", function(err,conn){
     app.listen(port,function(){

@@ -64,7 +64,7 @@ exports.delete_element_in_shopping_list_of_actor = function (req, res) {
     Actor.findById(req.params.actorId)
         .then((actor) => {
             var element = actor.shoppingList.find((cat, index) => {
-                if (cat.id == req.params.categoryId)
+                if (cat.id == req.params.shopingListId)
                     return cat
             });
             var idx = actor.shoppingList.indexOf(element)

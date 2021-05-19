@@ -66,6 +66,7 @@ var RecipeSchema = new Schema({
     type: String,
     default: null,
   },
+  createdBy: [Schema.Types.ObjectId],
   category: [category.CategorySchema],
   comments: [comment.CommentScheme],
   steps: [steps.StepSchema],

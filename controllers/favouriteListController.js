@@ -24,7 +24,7 @@ exports.read_favourite_list_of_actor = function (req, res) {
 exports.add_recipie_to_a_favourite_list_of_actor = function (req, res) {
     Actor.findById(req.params.actorId)
         .then((actor) => {
-                actor.favouriteLists.push(req.body);
+                actor.favouriteLists.push(req.body.id);
                 return actor.save();
             }
         )

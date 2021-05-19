@@ -15,12 +15,10 @@ module.exports = function (app) {
     app.route('/v1/datawarehouse/MostCommentedRecipes')
         .get(dataWarehouse.list_most_commented_recipes);
 
-    app.route('/v1/datawarehouse/MostSearchedRecipesBySeasons')
-        .get(dataWarehouse.list_most_added_to_favourite_by_seasons);
+    app.route('/v1/datawarehouse/MostlyLikedThisWeek')
+        .get(dataWarehouse.list_most_liked_recipes);
 
-    app.route('/v1/datawarehouse/MostlyAddedToFavourite')
-        .get(dataWarehouse.list_most_added_to_favourite);
-
+    // most liked this weeks kind of doubled to previous ones
     app.route('/v1/datawarehouse/MostlyLikedThisWeek')
         .get(dataWarehouse.list_most_liked_this_week);
 

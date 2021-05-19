@@ -1,7 +1,8 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Ingredient = mongoose.model('Ingredients'),
+    Ingredients = mongoose.model('Ingredients'),
+    Actor = mongoose.model('Actors'),
     Recipe = mongoose.model('Recipes'),
     ShoppingList = mongoose.model('ShoppingList');
 
@@ -103,14 +104,14 @@ exports.list_all_ingredients_of_shopping_list = function (req, res) {
 
 
 exports.create_a_ingredient_of_shopping_list = function (req, res) {
-    ShoppingList.findById(req.params.shoppingListId)
-        .then((shoppingList) => {
-            shoppingList.createdRecipes.push(req.body);
-                return shoppingList.save();
-            }
-        )
-        .then((shoppingList) => {
-            res.json({message: 'Successfully add ingredient to shopping list'});
+    Actor.findById(req.params.actorId)
+        .then((actor) => {
+            console.log(req.body)
+            actor.shoppingList[0].ingredients.push(req.body);
+            return actor.save();
+        })
+        .then((recipe) => {
+            res.json({ message: 'Successfully add ingredient to shopping list' });
         })
         .catch(e => res.status(400).send(e));
 };

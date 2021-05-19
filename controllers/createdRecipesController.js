@@ -25,7 +25,7 @@ exports.list_all_created_recipes_of_actor= function (req, res) {
 exports.add_a_created_recipe_of_actor = function (req, res) {
     Actor.findById(req.params.actorId)
         .then((actor) => {
-                actor.createdRecipes.push(req.body);
+                actor.createdRecipes.push(req.body.id);
                 return actor.save();
             }
         )

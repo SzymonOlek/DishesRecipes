@@ -20,6 +20,7 @@
     "bcrypt": "^5.0.1",
     "dataformat": "^1.0.0",
     "express": "^4.17.1",
+    "isodate": "^0.1.4",
     "mongoose": "^5.2.8",
     "nanoid": "^3.1.22"
   }
