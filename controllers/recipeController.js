@@ -29,20 +29,12 @@ exports.list_my_recipe = async function(req, res) { // todo
 
 exports.search_recipe = function(req, res) {
     var query = {};
-// add ingredients
+
     if(req.query.categoryId){
         query.category=req.query.categoryId;
     }
 
-    if(req.query.stars){ // chanage to min ie. min 3 starts etc.
-        query.stars = req.query.stars;
-    }
-
-    if(req.query.difficultLevel){ // as max diff level
-        query.difficultLevel = req.query.difficultLevel;
-    }
-
-    if(req.query.calories){ // / as max calo level
+    if(req.query.calories){
         query.calories = req.query.calories;
     }
 
@@ -50,36 +42,63 @@ exports.search_recipe = function(req, res) {
     if(req.query.startFrom){
         skip = parseInt(req.query.startFrom);
     }
+
     var limit=0;
-    if(req.query.pageSize){
-        limit=parseInt(req.query.pageSize);
+    if(req.query.limit){
+        limit=parseInt(req.query.limit);
     }
 
     var sort="";
-    if(req.query.reverse=="true"){
+
+    if(req.query.reverse=="true"){  
         sort="-";
     }
-    if(req.query.sortedBy){
+
+    if(req.query.sortedBy){  // sort
         sort+=req.query.sortedBy;
     }
 
-    console.log("Query: "+query+" Skip:" + skip+" Limit:" + limit+" Sort:" + sort);
+    var tempResult = Recipe.find(query);
 
-    Recipe.find(query)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-        .lean()
-        .exec(function(err, recipe){
-            console.log('Start searching recipes');
-            if (err){
-                res.send(err);
-            }
-            else{
-                res.json(recipe);
-            }
-            console.log('End searching recipes');
-        });
+    if(req.body.ingredients){ // contains specificed ingredients
+        tempResult = tempResult.where('ingredients.name').all(req.body.ingredients);
+    }
+
+    if(req.body.categories){ // match array of categories
+        tempResult = tempResult.where('category.name').all(req.body.categories);
+    }
+
+    if(req.query.stars){ // stars greater then or equal
+        tempResult = tempResult.where('stars').gte(req.query.stars);
+    }
+
+    if(req.query.difficultLevel){ // difficultLevel lower then or equal
+        tempResult = tempResult.where('difficultLevel').lte(req.query.stars);
+    }
+
+    if(req.query.preparationTimeLte){ // preparationTime greater then or equal
+        tempResult = tempResult.where('preparationTime').lte(req.query.preparationTimeLte);
+    }
+
+    if(req.query.preparationTimeGte){// preparationTime lower then or equal
+        tempResult = tempResult.where('preparationTime').gte(req.query.preparationTimeGte);
+    }
+
+    tempResult
+    .sort(sort)
+    .skip(skip)
+    .limit(limit)
+    .lean()
+    .exec(function(err, recipe){
+        if (err){
+            res.send(err);
+        }
+        else{
+            res.json(recipe);
+        }
+    });
+    
+
 };
 
 
@@ -142,6 +161,3 @@ exports.delete_a_recipe = function(req, res) {
         }
     });
 };
-
-
-//TODO add steps to recipe etc.
